@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import UserCard from "./UserCard";
+import UserCard , {User} from "./UserCard";
 
-const UserCardList = (props:any) => {
+const UserCardList :React.FC<{ cardList: User[] }> = ({ cardList }) => {
   return (
     <Container>
-      {props.items.map((item:any) => (
+      {cardList.map((item:any) => (
         <UserCard
           key={item.id}
-          link={item.html_url}
-          title={item.name}
-          description={item.description}
-          image={item.avatar_url}
+         userCard={item}
         />
       ))}
     </Container>

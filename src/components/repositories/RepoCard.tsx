@@ -1,15 +1,32 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-const RepoCard = (props: any) => {
+export interface RepositoryCard {
+  full_name: string
+  description: string
+  name: string
+  language: string
+  forks_count: number
+  stargazers_count: number
+  url: string
+  html_url: string
+  open_issues_count: number
+  owner: {
+    avatar_url: string
+  }
+  id: number
+}
+
+
+const RepoCard :React.FC<{ repoCard: RepositoryCard }> = ({ repoCard }) => {
   return (
     <Container>
-      <a href={props.link}>
-        <Image src={props.image} />
+      <a href={repoCard.html_url}>
+        <Image src={repoCard.owner.avatar_url} />
       </a>
       <CardBody>
-        <Title>{props.title}</Title>
-        <Description>{props.description}</Description>
+        <Title>{repoCard.name}</Title>
+        <Description>{repoCard.description}</Description>
       </CardBody>
     </Container>
   );

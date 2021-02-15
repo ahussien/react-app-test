@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import RepoCard from "./RepoCard";
+import RepoCard, {RepositoryCard} from "./RepoCard";
 
-const RepoCardList = (props: any) => {
+
+const RepoCardList:React.FC<{ cardList: RepositoryCard[] }> = ({ cardList }) => {
   return (
     <Container>
-      {props.items.map((item: any) => (
-        <RepoCard
-          key={item.id}
-          link={item.html_url}
-          title={item.name}
-          description={item.description}
-          image={item.owner.avatar_url}
-        />
+      {cardList.map((item: any) => (
+        <RepoCard repoCard= {item} key={item.id}/>
       ))}
     </Container>
   );

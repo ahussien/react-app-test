@@ -110,9 +110,9 @@ const Search = () => {
       <Status status={status} />
 
       {searchType === "repositories" ? (
-        <RepoCardList items={searchResults} />
+        <RepoCardList cardList={searchResults} />
       ) : (
-        <UserCardList items={searchResults} />
+        <UserCardList cardList={searchResults} />
       )}
     </div>
   );

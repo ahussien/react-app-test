@@ -1,17 +1,33 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const UserCard =(props:any)=> {
+
+export interface User {
+  avatar_url: string
+  login: string
+  name: string
+  location: string
+  bio: string
+  html_url: string
+  public_repos: number
+  followers: number
+  following: number
+  twitter_username: string
+  description: string
+  id: number
+}
+
+const UserCard :React.FC<{ userCard: User }> = ({ userCard }) => {
     return (
       <Container>
-        <a href={props.link}>
-          <Image src={props.image} />
-        </a>
-        <CardBody>
-          <Title>{props.title}</Title>
-          <Description>{props.description}</Description>
-        </CardBody>
-      </Container>
+      <a href={userCard.html_url}>
+        <Image src={userCard.avatar_url} />
+      </a>
+      <CardBody>
+        <Title>{userCard.name}</Title>
+        <Description>{userCard.description}</Description>
+      </CardBody>
+    </Container>
     )
   
 }
