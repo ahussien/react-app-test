@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+
 import UserCard , {User} from "./UserCard";
 
 const UserCardList :React.FC<{ cardList: User[] }> = ({ cardList }) => {

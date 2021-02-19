@@ -1,72 +1,52 @@
-import React, { Component, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 import _ from "lodash";
-import styled from "styled-components";
+
 import SearchBox from "./SearchBox";
 import RepoCardList from "../repositories/RepoCardList";
 import UserCardList from "../users/UserCardList";
-import Api from "../../services/api";
 import styles from "../../styles.module.css";
 
-const Search = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [status, setStatus] = useState('');
-  const [searchType, setSearchType] = useState('');
-  const [searchText, setSearchText] = useState('');
+const Search = (props: any) => {
+  const [searchType, setSearchType] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
 
   /**
-   * This will be called every time there is
+   * This is flag to center the search box
+   */
+  const isShownMiddle =
+    !searchText || searchText.length < 3 || searchText === "";
+
+  /**
+   * debounce the search action until the user complete entering the search term
    * a change in the input
    * @param {*} { target: { value } }
    */
-
-   console.log(searchText);
-  const isShownMiddle = !searchText || searchText.length < 3 || searchText === "";
+  const debouncedSearch = useRef( _.debounce((searchType: string, searchText: string) => search(searchType, searchText),1000)).current;
 
   /**
    * This will be called every time there is
-   * a change in the input
-   * @param {*} { target: { value } }
-   */
-  const debouncedSearch = useRef(
-    _.debounce(
-      (searchType: string, searchText: string) =>
-        search(searchType, searchText),
-      1000
-    )
-  ).current;
-
-  /**
-   * This will be called every time there is
-   * a change in the input
-   * @param {*} { target: { value } }
+   * a change in the status of the search
+   * @param {*} { status }
    */
   const Status = ({ status }: any) => {
-    if (status === "") {
-      return <div></div>;
-    }
-    if (status === "loading") {
-      return <div style={{ marginLeft: "15px" }}>Loading Data ...</div>;
-    }
-    if (status === "error") {
-      return <div style={{ marginLeft: "15px" }}>Something went wrong ...</div>;
-    }
+    if (status === "") {return <div></div>;}
+    if (status === "loading") {return <div className={styles.loadingText}>Loading ...</div>;}
+    if (status === "error") {return <div className={styles.errorText}>Something went wrong ...</div>;}
+
     return null;
   };
 
   /**
-   * This will be called every time there is
-   * a change in the input
-   * @param {*} { target: { value } }
+   * This will be called to reset the search page
    */
-  const resetSearchPage = () => {
-    setSearchResults([]);
-    setStatus("");
-  };
+  const resetSearchPage = () => props.clearSearch(searchText, searchType);
 
   /**
-   * This will be called every time there is
+   * This will be called every time the user type in the search box
    * a change in the input
-   * @param {*} { target: { value } }
+   * @param {*} {searchType: string, searchText: string}
    */
   const onSearchChange = (searchType: string, searchText: string) => {
     setSearchType(searchType);
@@ -79,26 +59,14 @@ const Search = () => {
   };
 
   /**
-   * In charge to send the value
-   * to the API.
+   * Dispatch the search start 
    * @param {*} value
    */
   const search = async (searchType: string, searchText: string) => {
-    setStatus("loading");
-    try {
-      const { data } = await Api.getSearchGithub(searchType, searchText);
-      setSearchResults(data);
-      setStatus("");
-    } catch (error) {
-      setStatus("error");
-    }
+    props.startSearch(searchText, searchType);
   };
 
-  /**
-   * This will be called every time there is
-   * a change in the input
-   * @param {*} { target: { value } }
-   */
+
   return (
     <div className={isShownMiddle ? styles.containercentred : styles.container}>
       <SearchBox
@@ -106,13 +74,11 @@ const Search = () => {
         buttonText="Search"
         onSearchChange={onSearchChange}
       />
-
-      <Status status={status} />
-
+      <Status status={props.status} />
       {searchType === "repositories" ? (
-        <RepoCardList cardList={searchResults} />
+        <RepoCardList cardList={props.items} />
       ) : (
-        <UserCardList cardList={searchResults} />
+        <UserCardList cardList={props.items} />
       )}
     </div>
   );

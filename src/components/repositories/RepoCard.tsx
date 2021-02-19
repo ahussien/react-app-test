@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 
 export interface RepositoryCard {
@@ -38,8 +38,6 @@ const Container = styled.div`
   margin: 15px;
   border: solid 1px lightgray;
   text-align: center;
-  // border-radius: 5px;
-
   @media (max-width: 768px) {
     & {
       flex: 1;

@@ -16,3 +16,13 @@
     padding: 10px;
     padding-bottom: 20px
 }
+
+.loadingText {
+    color: gray;
+    margin-left: 15px
+}
+
+.errorText {
+    color: red;
+    margin-left: 15px
+}
